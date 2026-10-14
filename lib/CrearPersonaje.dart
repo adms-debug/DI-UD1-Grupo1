@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'PaletaColores.dart';
+import 'AppTipografia.dart';
 import 'buttons.dart';
 
 //Pantalla simple para crear un personaje RPG.
@@ -34,7 +35,10 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
     return Scaffold(
       backgroundColor: PaletaColores.fondo,
       appBar: AppBar(
-        title: const Text('Crear personaje'),
+        title: Text(
+          'Crear personaje',
+          style: AppTipografia.titularMagno(fontSize: 28),
+        ),
         backgroundColor: PaletaColores.superficie,
         foregroundColor: PaletaColores.acentoPrimario,
         centerTitle: true,
@@ -45,10 +49,11 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
           children: [
             TextField(
               controller: _nombreController,
-              style: const TextStyle(color: PaletaColores.textoPrincipal),
+              style: AppTipografia.cuerpo(color: PaletaColores.textoPrincipal),
               decoration: InputDecoration(
                 labelText: 'Nombre',
-                labelStyle: const TextStyle(color: PaletaColores.textoSecundario),
+                labelStyle:
+                    AppTipografia.etiqueta(color: PaletaColores.textoSecundario),
                 filled: true,
                 fillColor: PaletaColores.superficie,
                 border: const OutlineInputBorder(),
@@ -93,14 +98,15 @@ class _SelectorRazaState extends State<SelectorRaza> {
     return DropdownButtonFormField<String>(
       initialValue: _razaSeleccionada,
       dropdownColor: PaletaColores.superficie,
-      style: const TextStyle(color: PaletaColores.textoPrincipal),
-      decoration: const InputDecoration(
+      style: AppTipografia.cuerpo(color: PaletaColores.textoPrincipal),
+      decoration: InputDecoration(
         labelText: 'Raza',
-        labelStyle: TextStyle(color: PaletaColores.textoSecundario),
+        labelStyle:
+            AppTipografia.etiqueta(color: PaletaColores.textoSecundario),
         filled: true,
         fillColor: PaletaColores.superficie,
-        border: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
+        border: const OutlineInputBorder(),
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: PaletaColores.acentoPrimario),
         ),
       ),
