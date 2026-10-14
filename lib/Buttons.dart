@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'AppTipografia.dart';
 import 'PaletaColores.dart';
 
 class BotonCrearPersonaje extends StatelessWidget {
@@ -17,7 +18,11 @@ class BotonCrearPersonaje extends StatelessWidget {
           backgroundColor: PaletaColores.acentoPrimario,
           foregroundColor: PaletaColores.fondo,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: const TextStyle(fontSize: 18),
+          textStyle: AppTipografia.subtituloDecorativo(
+            color: PaletaColores.fondo,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         child: const Text('Crear personaje'),
       ),

@@ -3,8 +3,8 @@ import 'PaletaColores.dart';
 import 'AppTipografia.dart';
 import 'buttons.dart';
 
-//Pantalla simple para crear un personaje RPG.
-//Tiene un campo de texto (nombre), un desplegable (raza) y un botón.
+//Pantalla para crear un personaje RPG.
+//Tiene un campo de texto (nombre), tarjetas de selección (raza) y un botón.
 class CrearPersonaje extends StatefulWidget {
   const CrearPersonaje({super.key});
 
@@ -13,13 +13,11 @@ class CrearPersonaje extends StatefulWidget {
 }
 
 class _CrearPersonajeState extends State<CrearPersonaje> {
-  //Controlador: permite leer lo que el usuario escribe en el TextField.
   final TextEditingController _nombreController = TextEditingController();
 
-  //Aquí se guarda la raza que elija el usuario en el desplegable.
+  //Raza elegida en las tarjetas. Empieza en null: aún no hay ninguna.
   String? _raza;
 
-  //Libera el controlador cuando la pantalla se cierra.
   @override
   void dispose() {
     _nombreController.dispose();
@@ -35,17 +33,28 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
     return Scaffold(
       backgroundColor: PaletaColores.fondo,
       appBar: AppBar(
-        title: Text(
-          'Crear personaje',
-          style: AppTipografia.titularMagno(fontSize: 28),
-        ),
         backgroundColor: PaletaColores.superficie,
-        foregroundColor: PaletaColores.acentoPrimario,
         centerTitle: true,
+        //Encabezado: icono temático + título estilizado, en un Row centrado.
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.shield, color: PaletaColores.acentoPrimario),
+            const SizedBox(width: 10),
+            Text(
+              'Crear personaje',
+              style: AppTipografia.titularMagno(
+                color: PaletaColores.acentoPrimario,
+                fontSize: 28,
+              ),
+            ),
+          ],
+        ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _nombreController,
@@ -56,17 +65,35 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
                     AppTipografia.etiqueta(color: PaletaColores.textoSecundario),
                 filled: true,
                 fillColor: PaletaColores.superficie,
-                border: const OutlineInputBorder(),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: PaletaColores.acentoPrimario),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: PaletaColores.acentoPrimario,
+                    width: 1.5,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: PaletaColores.acentoPrimario,
+                    width: 2.5,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
+            Text(
+              'Raza',
+              style: AppTipografia.titularSeccion(
+                color: PaletaColores.acentoPrimario,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 12),
             SelectorRaza(
               onChanged: (raza) => _raza = raza,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             BotonCrearPersonaje(onPressed: _crear),
           ],
         ),
@@ -75,10 +102,10 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
   }
 }
 
-//Desplegable para elegir la raza del personaje.
-//Es StatefulWidget porque necesita recordar la raza seleccionada.
+//Selector de raza con tarjetas.
+//Es StatefulWidget porque necesita recordar cuál está seleccionada.
 class SelectorRaza extends StatefulWidget {
-  //Función opcional para avisar a la pantalla padre de la raza elegida.
+  //Avisa a la pantalla padre de la raza elegida.
   final ValueChanged<String>? onChanged;
 
   const SelectorRaza({super.key, this.onChanged});
@@ -90,40 +117,95 @@ class SelectorRaza extends StatefulWidget {
 class _SelectorRazaState extends State<SelectorRaza> {
   final List<String> _razas = ['Humano', 'Elfo', 'Enano', 'Orco', 'Mediano'];
 
-  //Raza elegida. Empieza en null: todavía no se ha seleccionado ninguna.
   String? _razaSeleccionada;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      initialValue: _razaSeleccionada,
-      dropdownColor: PaletaColores.superficie,
-      style: AppTipografia.cuerpo(color: PaletaColores.textoPrincipal),
-      decoration: InputDecoration(
-        labelText: 'Raza',
-        labelStyle:
-            AppTipografia.etiqueta(color: PaletaColores.textoSecundario),
-        filled: true,
-        fillColor: PaletaColores.superficie,
-        border: const OutlineInputBorder(),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: PaletaColores.acentoPrimario),
+    //Wrap coloca las tarjetas en fila y salta de línea si no caben.
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: _razas.map((raza) {
+        return TarjetaRaza(
+          nombre: raza,
+          seleccionada: raza == _razaSeleccionada,
+          onTap: () {
+            setState(() {
+              _razaSeleccionada = raza;
+            });
+            widget.onChanged?.call(raza);
+          },
+        );
+      }).toList(),
+    );
+  }
+}
+
+//Tarjeta individual de raza.
+//Inactiva: fondo superficie y borde transparente.
+//Seleccionada: borde dorado, sombra exterior e icono de check.
+class TarjetaRaza extends StatelessWidget {
+  final String nombre;
+  final bool seleccionada;
+  final VoidCallback onTap;
+
+  const TarjetaRaza({
+    super.key,
+    required this.nombre,
+    required this.seleccionada,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: PaletaColores.superficie,
+          borderRadius: BorderRadius.circular(12),
+          //El borde siempre mide 1.5 (transparente si no está seleccionada)
+          //para que la tarjeta no cambie de tamaño al seleccionarla.
+          border: Border.all(
+            color: seleccionada
+                ? PaletaColores.acentoPrimario
+                : Colors.transparent,
+            width: 1.5,
+          ),
+          boxShadow: seleccionada
+              ? [
+                  BoxShadow(
+                    color: PaletaColores.acentoPrimario.withValues(alpha: 0.4),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : [],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              nombre,
+              style: AppTipografia.encabezado(
+                color: seleccionada
+                    ? PaletaColores.acentoPrimario
+                    : PaletaColores.textoPrincipal,
+                fontSize: 16,
+              ),
+            ),
+            if (seleccionada) ...[
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.check_circle,
+                color: PaletaColores.acentoPrimario,
+                size: 20,
+              ),
+            ],
+          ],
         ),
       ),
-      items: _razas
-          .map((raza) => DropdownMenuItem<String>(
-                value: raza,
-                child: Text(raza),
-              ))
-          .toList(),
-      onChanged: (String? nuevaRaza) {
-        setState(() {
-          _razaSeleccionada = nuevaRaza;
-        });
-        if (nuevaRaza != null) {
-          widget.onChanged?.call(nuevaRaza);
-        }
-      },
     );
   }
 }
