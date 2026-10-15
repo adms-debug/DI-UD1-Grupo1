@@ -11,28 +11,76 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ficha de personaje RPG',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        // Configuramos un tema oscuro por defecto para darle la estética de juego de rol
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF120E0A),
+        primaryColor: const Color(0xFFD4AF37),
+        //colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const CharacterSheetScreen(),
+      debugShowCheckedModeBanner: false,
+      //home: const MyHomePage(title: 'Ficha de personaje RPG'),
     );
   }
+}
+
+class CharacterSheetScreen extends StatelessWidget {
+  const CharacterSheetScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF120E0A),
+        title: const Text(
+          'texto de arriva',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'VISTA UNICA DE FICHA',
+              style: TextStyle(
+                color: Color(0xFFD4AF37),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Ficha de Elarion Lightbringer',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Identidad, clase, atributos, equipo y progreso en una sola vista.',
+              style: TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+            const SizedBox(height: 24),
+            _buildIdentitySection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildIdentitySection() {
+  return const Text('pa no dejarlo vacioooo');
 }
 
 class MyHomePage extends StatefulWidget {
