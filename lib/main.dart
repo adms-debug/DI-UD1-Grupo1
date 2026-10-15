@@ -1,5 +1,6 @@
+import 'package:creador_personaje_rpg/pantallas/pantalla3.dart';
 import 'package:flutter/material.dart';
-import 'CrearPersonaje.dart';
+import 'package:creador_personaje_rpg/CrearPersonaje.dart';
 
 void main() {
   runApp(const MyApp());
