@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Estilos tipográficos de la aplicación basados en Google Fonts
-/// para la temática de fantasía RPG.
+//Estilos tipográficos de la aplicación basados en Google Fonts
+//para la temática de fantasía RPG.
 class AppTipografia {
-  // Evita que se pueda crear un objeto de esta clase.
+  //Evita que se pueda crear un objeto de esta clase.
   AppTipografia._();
 
-  /// 1. Titulares y Nombres de Personajes (UnifrakturMaguntia)
-  /// Uso: Nombres legendarios, títulos principales de pantalla.
-  static TextStyle titularMagno({
-    Color color = const Color(0xFFE5A93C), // Dorado
-    double fontSize = 32,
-  }) {
-    return GoogleFonts.unifrakturMaguntia(
-      fontSize: fontSize,
-      fontWeight: FontWeight.bold,
-      color: color,
-    );
-  }
-
-  /// Títulos de sección importantes (Cinzel - Bold)
-  /// Uso: Clases, razas, subtítulos principales.
+  //1. Titulares y Nombres de Personajes (UnifrakturMaguntia)
+  //Títulos de sección importantes (Cinzel - Bold)
+  //Uso: Clases, razas,Titulos, subtítulos principales, Botones.
   static TextStyle titularSeccion({
     Color color = const Color(0xFFE5A93C), // Dorado o Blanco
     double fontSize = 24,
