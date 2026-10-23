@@ -14,7 +14,7 @@ class PaletaColores {
   static const Color superficie = Color(0xFF1E202C);
 
   /// Acento primario (dorado): botones principales, bordes activos y títulos.
-  static const Color acentoPrimario = Color(0xFFE5A93C);
+  static const Color bordePrimario = Color(0xFFE5A93C);
 
   /// Acento secundario (púrpura): atributos mentales, barras de progreso y elementos mágicos.
   static const Color acentoSecundario = Color(0xFF8A5CF5);
