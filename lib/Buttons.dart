@@ -15,7 +15,7 @@ class BotonSiguiente extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaColores.acentoPrimario,
+          backgroundColor: PaletaColores.bordePrimario,
           foregroundColor: PaletaColores.fondo,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
@@ -53,14 +53,14 @@ class BotonAtras extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: PaletaColores.acentoPrimario,
-          side: const BorderSide(color: PaletaColores.acentoPrimario, width: 1.5),
+          foregroundColor: PaletaColores.bordePrimario,
+          side: const BorderSide(color: PaletaColores.bordePrimario, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
           textStyle: AppTipografia.subtituloDecorativo(
-            color: PaletaColores.acentoPrimario,
+            color: PaletaColores.bordePrimario,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -91,7 +91,7 @@ class BotonCrearPersonaje extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: PaletaColores.acentoPrimario,
+          backgroundColor: PaletaColores.bordePrimario,
           foregroundColor: PaletaColores.fondo,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
