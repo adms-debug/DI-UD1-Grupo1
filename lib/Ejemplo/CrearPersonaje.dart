@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'PaletaColores.dart';
-import 'AppTipografia.dart';
-import 'buttons.dart';
+import '../PaletaColores.dart';
+import '../AppTipografia.dart';
+import '../buttons.dart';
 
 //Pantalla para crear un personaje RPG.
 //Tiene un campo de texto (nombre), tarjetas de selección (raza) y un botón.
@@ -43,7 +43,7 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
             const SizedBox(width: 10),
             Text(
               'Crear personaje',
-              style: AppTipografia.titularMagno(
+              style: AppTipografia.titularSeccion(
                 color: PaletaColores.acentoPrimario,
                 fontSize: 28,
               ),
