@@ -33,7 +33,7 @@ class InventarioItem extends StatelessWidget {
           // Si está equipado, el borde es dorado; si no, es sutil
           border: Border.all(
             color: equipado
-                ? PaletaColores.acentoPrimario
+                ? PaletaColores.bordePrimario
                 : PaletaColores.textoPrincipal,
             width: equipado ? 1.5 : 1,
           ),
@@ -47,7 +47,7 @@ class InventarioItem extends StatelessWidget {
                 color: PaletaColores.superficie,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icono, color: PaletaColores.acentoPrimario, size: 24),
+              child: Icon(icono, color: PaletaColores.bordePrimario, size: 24),
             ),
             const SizedBox(width: 15),
 
@@ -70,7 +70,7 @@ class InventarioItem extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: const BoxDecoration(
-                    color: PaletaColores.acentoPrimario,
+                    color: PaletaColores.bordePrimario,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

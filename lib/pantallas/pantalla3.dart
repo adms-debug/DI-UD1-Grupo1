@@ -61,7 +61,7 @@ class Pantalla3State extends State<Pantalla3> {
                       color: PaletaColores.superficie,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: PaletaColores.acentoPrimario,
+                        color: PaletaColores.bordePrimario,
                         width: 1.5,
                       ),
                     ),
@@ -101,7 +101,7 @@ class Pantalla3State extends State<Pantalla3> {
                   color: PaletaColores.superficie,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: PaletaColores.acentoPrimario,
+                    color: PaletaColores.bordePrimario,
                     width: 1,
                   ),
                 ),
@@ -119,7 +119,7 @@ class Pantalla3State extends State<Pantalla3> {
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: PaletaColores.acentoPrimario,
+                          color: PaletaColores.bordePrimario,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -268,7 +268,7 @@ class Pantalla3State extends State<Pantalla3> {
                     color: PaletaColores.superficie,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: PaletaColores.acentoPrimario,
+                      color: PaletaColores.bordePrimario,
                       width: 2,
                     ),
                   ),
@@ -352,7 +352,7 @@ class Pantalla3State extends State<Pantalla3> {
                   InventarioItem(
                     titulo: 'AMULETO',
                     icono: Icons.military_tech,
-                    subtitulo: 'ss',
+                    subtitulo: '',
                     equipado: amuletoEquipado,
                     onTap: () {
                       setState(() {

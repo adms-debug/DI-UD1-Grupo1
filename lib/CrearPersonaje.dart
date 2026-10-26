@@ -40,12 +40,12 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.shield, color: PaletaColores.acentoPrimario),
+            const Icon(Icons.shield, color: PaletaColores.bordePrimario),
             const SizedBox(width: 10),
             Text(
               'Crear personaje',
-              style: AppTipografia.titularMagno(
-                color: PaletaColores.acentoPrimario,
+              style: AppTipografia.titularSeccion(
+                color: PaletaColores.bordePrimario,
                 fontSize: 28,
               ),
             ),
@@ -70,14 +70,14 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: PaletaColores.acentoPrimario,
+                    color: PaletaColores.bordePrimario,
                     width: 1.5,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: PaletaColores.acentoPrimario,
+                    color: PaletaColores.bordePrimario,
                     width: 2.5,
                   ),
                 ),
@@ -87,7 +87,7 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
             Text(
               'Raza',
               style: AppTipografia.titularSeccion(
-                color: PaletaColores.acentoPrimario,
+                color: PaletaColores.bordePrimario,
                 fontSize: 20,
               ),
             ),
@@ -169,14 +169,14 @@ class TarjetaRaza extends StatelessWidget {
           //para que la tarjeta no cambie de tamaño al seleccionarla.
           border: Border.all(
             color: seleccionada
-                ? PaletaColores.acentoPrimario
+                ? PaletaColores.bordePrimario
                 : Colors.transparent,
             width: 1.5,
           ),
           boxShadow: seleccionada
               ? [
                   BoxShadow(
-                    color: PaletaColores.acentoPrimario.withValues(alpha: 0.4),
+                    color: PaletaColores.bordePrimario.withValues(alpha: 0.4),
                     blurRadius: 10,
                     spreadRadius: 1,
                   ),
@@ -190,7 +190,7 @@ class TarjetaRaza extends StatelessWidget {
               nombre,
               style: AppTipografia.encabezado(
                 color: seleccionada
-                    ? PaletaColores.acentoPrimario
+                    ? PaletaColores.bordePrimario
                     : PaletaColores.textoPrincipal,
                 fontSize: 16,
               ),
@@ -199,7 +199,7 @@ class TarjetaRaza extends StatelessWidget {
               const SizedBox(width: 8),
               const Icon(
                 Icons.check_circle,
-                color: PaletaColores.acentoPrimario,
+                color: PaletaColores.bordePrimario,
                 size: 20,
               ),
             ],
