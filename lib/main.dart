@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Creador de personajes',
-      home: CrearPersonaje(),
+      home: Pantalla3(),
     );
   }
 }

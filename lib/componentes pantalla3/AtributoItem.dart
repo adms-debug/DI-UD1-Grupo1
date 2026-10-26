@@ -7,6 +7,8 @@ class AtributoItem extends StatelessWidget {
   final IconData icono;
   final String valor;
   final double progreso;
+  final VoidCallback? onIncrement;
+  final VoidCallback? onDecrement;
 
   const AtributoItem({
     super.key,
@@ -14,6 +16,8 @@ class AtributoItem extends StatelessWidget {
     required this.icono,
     required this.valor,
     required this.progreso,
+    this.onIncrement,
+    this.onDecrement,
   });
 
   @override
@@ -47,18 +51,21 @@ class AtributoItem extends StatelessWidget {
               // Nombre
               Expanded(child: Text(titulo, style: AppTipografia.encabezado())),
 
-              // Botón Menos
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: PaletaColores.superficie,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.remove,
-                  color: PaletaColores.textoSecundario,
-                  size: 18,
+              // Botón (-)
+              GestureDetector(
+                onTap: onDecrement,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: PaletaColores.superficie,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.remove,
+                    color: PaletaColores.textoSecundario,
+                    size: 18,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -73,18 +80,21 @@ class AtributoItem extends StatelessWidget {
               ),
               const SizedBox(width: 12),
 
-              // Botón Más
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: PaletaColores.superficie,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: PaletaColores.textoSecundario,
-                  size: 18,
+              // Botón (+)
+              GestureDetector(
+                onTap: onIncrement,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: PaletaColores.superficie,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.add,
+                    color: PaletaColores.textoSecundario,
+                    size: 18,
+                  ),
                 ),
               ),
             ],
