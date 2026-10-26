@@ -1,4 +1,7 @@
+import 'package:creador_personaje_rpg/pantallas/pantalla3.dart';
 import 'package:flutter/material.dart';
+import 'package:creador_personaje_rpg/CrearPersonaje.dart';
+
 import 'pantalla1.dart';
 
 void main() {
@@ -13,7 +16,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Creador de personajes',
-      home: Pantalla1(),
+      home: Pantalla3(),
     );
   }
 }
