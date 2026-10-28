@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:creador_personaje_rpg/componentes%20pantalla3/AtributoItem.dart';
 import 'package:creador_personaje_rpg/componentes%20pantalla3/InventarioItem.dart';
+import 'package:creador_personaje_rpg/componentes pantalla3/ObjetoModelo.dart';
 import 'package:creador_personaje_rpg/PaletaColores.dart';
 import 'package:creador_personaje_rpg/AppTipografia.dart';
 import 'package:creador_personaje_rpg/Buttons.dart';
+
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 
 class Pantalla3 extends StatefulWidget {
   const Pantalla3({super.key});
@@ -16,30 +21,101 @@ class Pantalla3State extends State<Pantalla3> {
   //Puntos y atributos
   int puntosDisponibles = 5;
 
-  int intelecto = 18;
-  final int intelectoBase = 18;
+  final Map<String, int> atributosBase = {
+    'fuerza': 10,
+    'destreza': 10,
+    'constitucion': 10,
+    'inteligencia': 10,
+    'sabiduria': 10,
+    'carisma': 10,
+  };
+  late final Map<String, int> atributos = Map.of(atributosBase);
 
-  int sabiduria = 14;
-  final int sabiduriaBase = 14;
+  static const Map<String, String> titulos = {
+    'fuerza': 'FUERZA',
+    'destreza': 'DESTREZA',
+    'constitucion': 'CONSTITUCIÓN',
+    'inteligencia': 'INTELIGENCIA',
+    'sabiduria': 'SABIDURÍA',
+    'carisma': 'CARISMA',
+  };
 
-  int voluntad = 16;
-  final int voluntadBase = 16;
+  static const Map<String, IconData> iconosAtributo = {
+    'fuerza': Icons.fitness_center,
+    'destreza': Icons.bolt,
+    'constitucion': Icons.shield,
+    'inteligencia': Icons.book,
+    'sabiduria': Icons.remove_red_eye,
+    'carisma': Icons.favorite,
+  };
 
-  int percepcion = 12;
-  final int percepcionBase = 12;
-
-  int concentracion = 10;
-  final int concentracionBase = 10;
-
-  //Variables de estado para saber cual está equipado
-  bool armaEquipada = true;
-  bool armaduraEquipada = false;
-  bool amuletoEquipado = false;
-  bool anilloEquipado = false;
-
-  //Variables para mostrar información del objeto seleccionado
-  String? objetoSeleccionado;
+  List<ObjetoModelo> objetos = [];
+  final Set<String> equipados = {};
+  ObjetoModelo? objetoSeleccionado;
   String? descripcionSeleccionada;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarObjetos();
+  }
+
+  Future<void> _cargarObjetos() async {
+    final texto = await rootBundle.loadString('assets/data/objetos.json');
+    final lista = jsonDecode(texto) as List<dynamic>;
+    if (!mounted) return;
+    setState(() {
+      objetos = lista.map((e) => ObjetoModelo.fromJson(e)).toList();
+    });
+  }
+
+  IconData _iconoPorTipo(String tipo) {
+    switch (tipo) {
+      case 'Arma':
+        return Icons.gavel;
+      case 'Defensa':
+        return Icons.shield;
+      default:
+        return Icons.inventory_2;
+    }
+  }
+
+  // Suma los bonificadores de los objetos equipados para un atributo
+  int _bonus(String clave) {
+    int suma = 0;
+    for (final o in objetos) {
+      if (equipados.contains(o.id)) {
+        suma += o.bonificadores[clave] ?? 0;
+      }
+    }
+    return suma;
+  }
+
+  Widget _construirAtributo(String clave) {
+    final total = atributos[clave]! + _bonus(clave);
+    return AtributoItem(
+      titulo: titulos[clave]!,
+      icono: iconosAtributo[clave]!,
+      valor: '$total',
+      progreso: (total / 30).clamp(0.0, 1.0),
+      onIncrement: () {
+        if (puntosDisponibles > 0 && total < 30) {
+          setState(() {
+            puntosDisponibles--;
+            atributos[clave] = atributos[clave]! + 1;
+          });
+        }
+      },
+      onDecrement: () {
+        if (atributos[clave]! > atributosBase[clave]!) {
+          setState(() {
+            puntosDisponibles++;
+            atributos[clave] = atributos[clave]! - 1;
+          });
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,120 +214,7 @@ class Pantalla3State extends State<Pantalla3> {
               const SizedBox(height: 15),
 
               //Atributos usando el componente AtributoItem de AtributoItem.dart
-              AtributoItem(
-                titulo: 'INTELECTO',
-                icono: Icons.book,
-                valor: '$intelecto',
-                progreso: (intelecto / 30).clamp(0.0, 1.0),
-                onIncrement: () {
-                  if (puntosDisponibles > 0 && intelecto < 30) {
-                    setState(() {
-                      puntosDisponibles--;
-                      intelecto++;
-                    });
-                  }
-                },
-                onDecrement: () {
-                  if (intelecto > 0) {
-                    setState(() {
-                      puntosDisponibles++;
-                      intelecto--;
-                    });
-                  }
-                },
-              ),
-
-              AtributoItem(
-                titulo: 'SABIDURÍA',
-                icono: Icons.remove_red_eye,
-                valor: '$sabiduria',
-                progreso: (sabiduria / 30).clamp(0.0, 1.0),
-                onIncrement: () {
-                  if (puntosDisponibles > 0 && sabiduria < 30) {
-                    setState(() {
-                      puntosDisponibles--;
-                      sabiduria++;
-                    });
-                  }
-                },
-                onDecrement: () {
-                  if (sabiduria > 0) {
-                    setState(() {
-                      puntosDisponibles++;
-                      sabiduria--;
-                    });
-                  }
-                },
-              ),
-
-              AtributoItem(
-                titulo: 'VOLUNTAD',
-                icono: Icons.shield,
-                valor: '$voluntad',
-                progreso: (voluntad / 30).clamp(0.0, 1.0),
-                onIncrement: () {
-                  if (puntosDisponibles > 0 && voluntad < 30) {
-                    setState(() {
-                      puntosDisponibles--;
-                      voluntad++;
-                    });
-                  }
-                },
-                onDecrement: () {
-                  if (voluntad > 0) {
-                    setState(() {
-                      puntosDisponibles++;
-                      voluntad--;
-                    });
-                  }
-                },
-              ),
-
-              AtributoItem(
-                titulo: 'PERCEPCIÓN',
-                icono: Icons.explore,
-                valor: '$percepcion',
-                progreso: (percepcion / 30).clamp(0.0, 1.0),
-                onIncrement: () {
-                  if (puntosDisponibles > 0 && percepcion < 30) {
-                    setState(() {
-                      puntosDisponibles--;
-                      percepcion++;
-                    });
-                  }
-                },
-                onDecrement: () {
-                  if (percepcion > 0) {
-                    setState(() {
-                      puntosDisponibles++;
-                      percepcion--;
-                    });
-                  }
-                },
-              ),
-
-              AtributoItem(
-                titulo: 'CONCENTRACIÓN',
-                icono: Icons.hourglass_empty,
-                valor: '$concentracion',
-                progreso: (concentracion / 30).clamp(0.0, 1.0),
-                onIncrement: () {
-                  if (puntosDisponibles > 0 && concentracion < 30) {
-                    setState(() {
-                      puntosDisponibles--;
-                      concentracion++;
-                    });
-                  }
-                },
-                onDecrement: () {
-                  if (concentracion > 0) {
-                    setState(() {
-                      puntosDisponibles++;
-                      concentracion--;
-                    });
-                  }
-                },
-              ),
+              ...titulos.keys.map(_construirAtributo),
 
               SizedBox(height: 30),
 
@@ -279,7 +242,7 @@ class Pantalla3State extends State<Pantalla3> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Detalles: $objetoSeleccionado',
+                            'Detalles: ${objetoSeleccionado!.nombre}',
                             style: AppTipografia.titularSeccion(),
                           ),
                           IconButton(
@@ -305,93 +268,34 @@ class Pantalla3State extends State<Pantalla3> {
 
               //Objetos usando el componente InventarioItem de InventarioItem.dart
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InventarioItem(
-                    titulo: 'ARMA',
-                    icono: Icons.edit,
-                    subtitulo: '',
-                    equipado: armaEquipada,
+                children: objetos.map((o) {
+                  return InventarioItem(
+                    titulo: o.nombre.toUpperCase(),
+                    icono: _iconoPorTipo(o.tipo),
+                    subtitulo: o.tipo,
+                    equipado: equipados.contains(o.id),
                     onTap: () {
                       setState(() {
-                        objetoSeleccionado = 'ARMA';
-                        descripcionSeleccionada = 'Arma';
+                        objetoSeleccionado = o;
+                        descripcionSeleccionada = o.descripcion;
                       });
                     },
                     onEquip: () {
                       setState(() {
-                        objetoSeleccionado = 'ARMA';
-                        armaEquipada = !armaEquipada;
-                        descripcionSeleccionada = armaduraEquipada
-                            ? '¡Has equipado el arma!'
-                            : 'Has desequipado el arma.';
+                        objetoSeleccionado = o;
+                        if (equipados.contains(o.id)) {
+                          equipados.remove(o.id);
+                          descripcionSeleccionada =
+                              'Has desequipado ${o.nombre}.';
+                        } else {
+                          equipados.add(o.id);
+                          descripcionSeleccionada =
+                              '¡Has equipado ${o.nombre}!';
+                        }
                       });
                     },
-                  ),
-                  InventarioItem(
-                    titulo: 'ARMADURA',
-                    icono: Icons.shield,
-                    subtitulo: '',
-                    equipado: armaduraEquipada,
-                    onTap: () {
-                      setState(() {
-                        objetoSeleccionado = 'ARMADURA';
-                        descripcionSeleccionada = 'Aramadura';
-                      });
-                    },
-                    onEquip: () {
-                      setState(() {
-                        objetoSeleccionado = 'ARMADURA';
-                        armaduraEquipada = !armaduraEquipada;
-                        descripcionSeleccionada = armaduraEquipada
-                            ? '¡Has equipado la armadura!'
-                            : 'Has desequipado la armadura.';
-                      });
-                    },
-                  ),
-                  InventarioItem(
-                    titulo: 'AMULETO',
-                    icono: Icons.military_tech,
-                    subtitulo: '',
-                    equipado: amuletoEquipado,
-                    onTap: () {
-                      setState(() {
-                        objetoSeleccionado = 'AMULETO';
-                        descripcionSeleccionada = 'Amuleto';
-                      });
-                    },
-                    onEquip: () {
-                      setState(() {
-                        objetoSeleccionado = 'AMULETO';
-                        amuletoEquipado = !amuletoEquipado;
-                        descripcionSeleccionada = armaduraEquipada
-                            ? '¡Has equipado el amuleto!'
-                            : 'Has desequipado el amuleto.';
-                      });
-                    },
-                  ),
-                  InventarioItem(
-                    titulo: 'ANILLO',
-                    icono: Icons.grid_view,
-                    subtitulo: '',
-                    equipado: anilloEquipado,
-                    onTap: () {
-                      setState(() {
-                        objetoSeleccionado = 'ANILLO';
-                        descripcionSeleccionada = 'Anillo';
-                      });
-                    },
-                    onEquip: () {
-                      setState(() {
-                        objetoSeleccionado = 'ANILLO';
-                        anilloEquipado = !anilloEquipado;
-                        descripcionSeleccionada = armaduraEquipada
-                            ? '¡Has equipado el anillo!'
-                            : 'Has desequipado el anillo.';
-                      });
-                    },
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
               SizedBox(height: 20),
 
