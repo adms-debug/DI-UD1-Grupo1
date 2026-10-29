@@ -430,8 +430,7 @@ class Pantalla4 extends StatelessWidget {
               const SizedBox(height: 12),
 
               // Botón Final: Crear Personaje
-              BotonFinal(
-                texto: 'Crear Personaje',
+              BotonCrearPersonaje(
                 onPressed: () => _mostrarDialogoExito(context),
               ),
               const SizedBox(height: 10),
