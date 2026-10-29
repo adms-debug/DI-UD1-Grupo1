@@ -307,14 +307,14 @@ class _Pantalla2State extends State<Pantalla2> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.shield, color: PaletaColores.acentoPrimario),
+            const Icon(Icons.shield, color: PaletaColores.bordePrimario),
             const SizedBox(width: 10),
             Flexible(
               child: Text(
                 'Clase y atributos',
                 overflow: TextOverflow.ellipsis,
                 style: AppTipografia.titularSeccion(
-                  color: PaletaColores.acentoPrimario,
+                  color: PaletaColores.bordePrimario,
                   fontSize: 22,
                 ),
               ),
@@ -329,7 +329,7 @@ class _Pantalla2State extends State<Pantalla2> {
   Widget _cuerpo() {
     if (_cargando) {
       return const Center(
-        child: CircularProgressIndicator(color: PaletaColores.acentoPrimario),
+        child: CircularProgressIndicator(color: PaletaColores.bordePrimario),
       );
     }
 
@@ -359,7 +359,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Reintentar'),
                 style: TextButton.styleFrom(
-                  foregroundColor: PaletaColores.acentoPrimario,
+                  foregroundColor: PaletaColores.bordePrimario,
                 ),
               ),
             ],
@@ -400,7 +400,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 margin: EdgeInsets.only(right: i < 3 ? 6 : 0),
                 decoration: BoxDecoration(
                   color: i < 2
-                      ? PaletaColores.acentoPrimario
+                      ? PaletaColores.bordePrimario
                       : PaletaColores.superficie,
                   borderRadius: BorderRadius.circular(2),
                 ),
@@ -429,7 +429,7 @@ class _Pantalla2State extends State<Pantalla2> {
         color: PaletaColores.superficie,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: PaletaColores.acentoPrimario.withValues(alpha: 0.25),
+          color: PaletaColores.bordePrimario.withValues(alpha: 0.25),
         ),
       ),
       child: child,
@@ -444,7 +444,7 @@ class _Pantalla2State extends State<Pantalla2> {
         Text(
           'Clase',
           style: AppTipografia.titularSeccion(
-            color: PaletaColores.acentoPrimario,
+            color: PaletaColores.bordePrimario,
             fontSize: 20,
           ),
         ),
@@ -515,7 +515,7 @@ class _Pantalla2State extends State<Pantalla2> {
           Text(
             'CLASE ELEGIDA',
             style: AppTipografia.etiqueta(
-              color: PaletaColores.acentoPrimario,
+              color: PaletaColores.bordePrimario,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -523,7 +523,7 @@ class _Pantalla2State extends State<Pantalla2> {
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(_iconoClase(clase.id), color: PaletaColores.acentoPrimario),
+              Icon(_iconoClase(clase.id), color: PaletaColores.bordePrimario),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
@@ -555,12 +555,12 @@ class _Pantalla2State extends State<Pantalla2> {
                   decoration: BoxDecoration(
                     color: PaletaColores.fondo,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: PaletaColores.acentoPrimario),
+                    border: Border.all(color: PaletaColores.bordePrimario),
                   ),
                   child: Text(
                     '+${e.value} ${_etiquetaAtributo[e.key] ?? e.key}',
                     style: AppTipografia.etiqueta(
-                      color: PaletaColores.acentoPrimario,
+                      color: PaletaColores.bordePrimario,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -585,7 +585,7 @@ class _Pantalla2State extends State<Pantalla2> {
           Text(
             'Atributos físicos',
             style: AppTipografia.titularSeccion(
-              color: PaletaColores.acentoPrimario,
+              color: PaletaColores.bordePrimario,
               fontSize: 20,
             ),
           ),
@@ -607,7 +607,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 '$_libres',
                 style: AppTipografia.titularSeccion(
                   color: sinPuntos
-                      ? PaletaColores.acentoPrimario
+                      ? PaletaColores.bordePrimario
                       : PaletaColores.textoPrincipal,
                   fontSize: 40,
                 ),
@@ -640,7 +640,7 @@ class _Pantalla2State extends State<Pantalla2> {
               value: _usados / _puntosTotales,
               minHeight: 8,
               backgroundColor: PaletaColores.fondo,
-              color: PaletaColores.acentoPrimario,
+              color: PaletaColores.bordePrimario,
             ),
           ),
           const SizedBox(height: 10),
@@ -650,7 +650,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 : 'Te quedan $_libres puntos por repartir.',
             style: AppTipografia.etiqueta(
               color: sinPuntos
-                  ? PaletaColores.acentoPrimario
+                  ? PaletaColores.bordePrimario
                   : PaletaColores.textoSecundario,
               fontSize: 12,
             ),
@@ -673,13 +673,13 @@ class _Pantalla2State extends State<Pantalla2> {
                 style: AppTipografia.etiqueta(
                   color: _usados == 0
                       ? PaletaColores.textoSecundario
-                      : PaletaColores.acentoPrimario,
+                      : PaletaColores.bordePrimario,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               style: TextButton.styleFrom(
-                foregroundColor: PaletaColores.acentoPrimario,
+                foregroundColor: PaletaColores.bordePrimario,
                 disabledForegroundColor: PaletaColores.textoSecundario,
               ),
             ),
@@ -757,11 +757,11 @@ class _Pantalla2State extends State<Pantalla2> {
               trackHeight: 4,
               activeTrackColor: PaletaColores.alerta,
               inactiveTrackColor: PaletaColores.superficie,
-              thumbColor: PaletaColores.acentoPrimario,
-              overlayColor: PaletaColores.acentoPrimario.withValues(alpha: 0.2),
+              thumbColor: PaletaColores.bordePrimario,
+              overlayColor: PaletaColores.bordePrimario.withValues(alpha: 0.2),
               activeTickMarkColor: Colors.transparent,
               inactiveTickMarkColor: Colors.transparent,
-              valueIndicatorColor: PaletaColores.acentoPrimario,
+              valueIndicatorColor: PaletaColores.bordePrimario,
               valueIndicatorTextStyle: AppTipografia.etiqueta(
                 color: PaletaColores.fondo,
                 fontWeight: FontWeight.bold,
@@ -782,7 +782,7 @@ class _Pantalla2State extends State<Pantalla2> {
               Text(
                 '$invertidos ${invertidos == 1 ? 'punto invertido' : 'puntos invertidos'}',
                 style: AppTipografia.etiqueta(
-                  color: PaletaColores.acentoPrimario,
+                  color: PaletaColores.bordePrimario,
                   fontSize: 12,
                 ),
               ),
@@ -817,14 +817,14 @@ class _Pantalla2State extends State<Pantalla2> {
       icon: Icon(icono, size: 20),
       style: IconButton.styleFrom(
         backgroundColor: PaletaColores.superficie,
-        foregroundColor: PaletaColores.acentoPrimario,
+        foregroundColor: PaletaColores.bordePrimario,
         disabledForegroundColor: PaletaColores.textoSecundario,
         fixedSize: const Size(36, 36),
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
-            color: PaletaColores.acentoPrimario.withValues(
+            color: PaletaColores.bordePrimario.withValues(
               alpha: onPressed == null ? 0.15 : 0.6,
             ),
           ),
@@ -845,7 +845,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 child: Text(
                   'Reglas de reparto',
                   style: AppTipografia.encabezado(
-                    color: PaletaColores.acentoPrimario,
+                    color: PaletaColores.bordePrimario,
                     fontSize: 15,
                   ),
                 ),
@@ -860,7 +860,7 @@ class _Pantalla2State extends State<Pantalla2> {
                 }),
                 trackColor: WidgetStateProperty.resolveWith((states) {
                   return states.contains(WidgetState.selected)
-                      ? PaletaColores.acentoPrimario
+                      ? PaletaColores.bordePrimario
                       : PaletaColores.fondo;
                 }),
               ),
@@ -950,14 +950,14 @@ class _TarjetaClase extends StatelessWidget {
           // Borde siempre de 1.5 para que la tarjeta no cambie de tamaño.
           border: Border.all(
             color: seleccionada
-                ? PaletaColores.acentoPrimario
+                ? PaletaColores.bordePrimario
                 : Colors.transparent,
             width: 1.5,
           ),
           boxShadow: seleccionada
               ? [
                   BoxShadow(
-                    color: PaletaColores.acentoPrimario.withValues(alpha: 0.4),
+                    color: PaletaColores.bordePrimario.withValues(alpha: 0.4),
                     blurRadius: 10,
                     spreadRadius: 1,
                   ),
@@ -975,7 +975,7 @@ class _TarjetaClase extends StatelessWidget {
                   _iconoClase(clase.id),
                   size: 28,
                   color: seleccionada
-                      ? PaletaColores.acentoPrimario
+                      ? PaletaColores.bordePrimario
                       : PaletaColores.textoSecundario,
                 ),
                 const SizedBox(height: 8),
@@ -983,7 +983,7 @@ class _TarjetaClase extends StatelessWidget {
                   clase.nombre,
                   style: AppTipografia.encabezado(
                     color: seleccionada
-                        ? PaletaColores.acentoPrimario
+                        ? PaletaColores.bordePrimario
                         : PaletaColores.textoPrincipal,
                     fontSize: 16,
                   ),
@@ -1004,7 +1004,7 @@ class _TarjetaClase extends StatelessWidget {
                 right: 0,
                 child: Icon(
                   Icons.check_circle,
-                  color: PaletaColores.acentoPrimario,
+                  color: PaletaColores.bordePrimario,
                   size: 20,
                 ),
               ),
