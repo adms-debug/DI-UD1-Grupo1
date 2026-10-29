@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'pantalla1.dart';
+=======
+import 'package:creador_personaje_rpg/pantallas/pantalla1.dart';
+>>>>>>> Stashed changes
 
 void main() {
   runApp(const MyApp());

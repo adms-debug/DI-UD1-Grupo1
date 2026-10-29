@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:creador_personaje_rpg/components/RazaItem.dart';
-import 'package:creador_personaje_rpg/PaletaColores.dart';
-import 'package:creador_personaje_rpg/AppTipografia.dart';
+import 'package:creador_personaje_rpg/paletas/PaletaColores.dart';
+import 'package:creador_personaje_rpg/paletas/AppTipografia.dart';
+import 'package:creador_personaje_rpg/components/Buttons.dart';
+import 'package:creador_personaje_rpg/components/Personaje.dart';
+import 'package:creador_personaje_rpg/pantallas/pantalla2.dart';
 
 class Pantalla1 extends StatefulWidget {
   const Pantalla1({super.key});
@@ -27,6 +30,12 @@ class _Pantalla1State extends State<Pantalla1> {
   @override
   void initState() {
     super.initState();
+    if (Personaje.nombre.isNotEmpty) {
+      _nombreController.text = Personaje.nombre;
+    }
+    if (Personaje.biografia.isNotEmpty) {
+      _biografiaController.text = Personaje.biografia;
+    }
     cargarRazas();
   }
 
@@ -57,6 +66,14 @@ class _Pantalla1State extends State<Pantalla1> {
         razas = razasCargadas;
         cargando = false;
         mensajeError = null;
+
+        // Si ya había una raza seleccionada previamente, restauramos su selección
+        if (Personaje.razaId.isNotEmpty) {
+          final idx = razas.indexWhere((r) => r['id'] == Personaje.razaId);
+          if (idx != -1) {
+            razaSeleccionadaIndex = idx;
+          }
+        }
       });
     } catch (error) {
       if (!mounted) return;
@@ -107,12 +124,30 @@ class _Pantalla1State extends State<Pantalla1> {
     }
 
     final razaElegida = razas[razaSeleccionadaIndex!];
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: PaletaColores.superficie,
-        content: Text(
-          '¡Datos guardados! Personaje: $nombre | Raza: ${razaElegida['nombre']}',
-          style: const TextStyle(color: PaletaColores.bordePrimario),
+    final biografia = _biografiaController.text.trim();
+
+    // Guardamos los datos de la Pantalla 1 en el modelo compartido Personaje
+    Personaje.nombre = nombre;
+    Personaje.biografia = biografia;
+    Personaje.raza = razaElegida;
+    Personaje.razaId = razaElegida['id'] as String? ?? '';
+    Personaje.razaNombre = razaElegida['nombre'] as String? ?? '';
+    Personaje.razaDescripcion = razaElegida['descripcion'] as String? ?? '';
+    final bonos = (razaElegida['bonificadores'] as Map<String, dynamic>?) ?? {};
+    Personaje.bonificadoresRaza = bonos.map((k, v) => MapEntry(k, (v as num).toInt()));
+
+    // Avanzamos a la Pantalla 2 pasando también los datos previos
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Pantalla2(
+          datosPrevios: {
+            'nombre': nombre,
+            'biografia': biografia,
+            'raza': razaElegida,
+            'razaId': Personaje.razaId,
+            'razaNombre': Personaje.razaNombre,
+          },
         ),
       ),
     );
@@ -268,38 +303,8 @@ class _Pantalla1State extends State<Pantalla1> {
 
               const SizedBox(height: 20),
 
-              // Botón Siguiente pantalla
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: PaletaColores.bordePrimario,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: _irASiguiente,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.arrow_forward,
-                        color: PaletaColores.superficie,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'SIGUIENTE',
-                        style: TextStyle(
-                          color: PaletaColores.superficie,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Botón Siguiente pantalla (en la primera pantalla solo va el de avanzar)
+              BotonSiguiente(onPressed: _irASiguiente),
             ],
           ),
         ),

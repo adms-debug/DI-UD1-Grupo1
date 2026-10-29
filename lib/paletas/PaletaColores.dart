@@ -17,6 +17,7 @@ class PaletaColores {
   static const Color bordePrimario = Color(0xFFE5A93C);
 
   /// Acento secundario (púrpura): atributos mentales, barras de progreso y elementos mágicos.
+  static const Color bordeSecundario = Color(0xFF8A5CF5);
   static const Color acentoSecundario = Color(0xFF8A5CF5);
 
   /// Atributos físicos y alertas (rojo carmesí): fuerza, vida e indicadores de límites.

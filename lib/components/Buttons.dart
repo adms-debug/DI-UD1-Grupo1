@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream:lib/Buttons.dart
 import 'AppTipografia.dart';
 import 'PaletaColores.dart';
+=======
+
+import '../paletas/AppTipografia.dart';
+import '../paletas/PaletaColores.dart';
+>>>>>>> Stashed changes:lib/components/Buttons.dart
 
 // Botón para ir a la siguiente pantalla del creador de personajes.
 class BotonSiguiente extends StatelessWidget {
