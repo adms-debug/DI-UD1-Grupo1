@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'AppTipografia.dart';
-import 'PaletaColores.dart';
+import '../paletas/AppTipografia.dart';
+import '../paletas/PaletaColores.dart';
 
 // Botón para ir a la siguiente pantalla del creador de personajes.
 class BotonSiguiente extends StatelessWidget {
@@ -79,11 +78,11 @@ class BotonAtras extends StatelessWidget {
 }
 
 // Botón final para crear el personaje (se usará en la última pantalla).
-class BotonFinal extends StatelessWidget {
+class BotonCrearPersonaje extends StatelessWidget {
   final String texto;
   final VoidCallback onPressed;
 
-  const BotonFinal({super.key, required this.texto, required this.onPressed});
+  const BotonCrearPersonaje({super.key, required this.texto, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

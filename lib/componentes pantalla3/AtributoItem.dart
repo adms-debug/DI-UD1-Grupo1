@@ -1,6 +1,6 @@
-import 'package:creador_personaje_rpg/AppTipografia.dart';
+import 'package:creador_personaje_rpg/paletas/AppTipografia.dart';
 import 'package:flutter/material.dart';
-import 'package:creador_personaje_rpg/PaletaColores.dart';
+import 'package:creador_personaje_rpg/paletas/PaletaColores.dart';
 
 class AtributoItem extends StatelessWidget {
   final String titulo;

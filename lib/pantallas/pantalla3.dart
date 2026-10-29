@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:creador_personaje_rpg/componentes%20pantalla3/AtributoItem.dart';
-import 'package:creador_personaje_rpg/componentes%20pantalla3/InventarioItem.dart';
-import 'package:creador_personaje_rpg/componentes pantalla3/ObjetoModelo.dart';
-import 'package:creador_personaje_rpg/PaletaColores.dart';
-import 'package:creador_personaje_rpg/AppTipografia.dart';
-import 'package:creador_personaje_rpg/Buttons.dart';
-import 'package:creador_personaje_rpg/pantalla1.dart';
-import 'package:creador_personaje_rpg/pantallas/pantalla4.dart';
-import 'package:creador_personaje_rpg/Personaje.dart';
-
+import 'package:flutter/services.dart';
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:creador_personaje_rpg/components/AtributoItem.dart';
+import 'package:creador_personaje_rpg/components/InventarioItem.dart';
+import 'package:creador_personaje_rpg/components/ObjetoModelo.dart';
+import 'package:creador_personaje_rpg/paletas/PaletaColores.dart';
+import 'package:creador_personaje_rpg/paletas/AppTipografia.dart';
+import 'package:creador_personaje_rpg/components/Buttons.dart';
+import 'package:creador_personaje_rpg/pantallas/pantalla4.dart';
+import 'package:creador_personaje_rpg/components/Personaje.dart';
 
 class Pantalla3 extends StatefulWidget {
-  const Pantalla3({super.key});
+  final Map<String, dynamic> datosPrevios;
+
+  const Pantalla3({super.key, this.datosPrevios = const {}});
 
   @override
   State<Pantalla3> createState() => Pantalla3State();
 }
 
 class Pantalla3State extends State<Pantalla3> {
-  //Puntos y atributos
   int puntosDisponibles = 5;
 
-  //Los atributos no se pueden bajar de 10
   final Map<String, int> atributosBase = {
     'fuerza': 10,
     'destreza': 10,
@@ -61,16 +59,32 @@ class Pantalla3State extends State<Pantalla3> {
   @override
   void initState() {
     super.initState();
+    if (Personaje.atributosFisicos.isNotEmpty) {
+      for (final k in ['fuerza', 'destreza', 'constitucion']) {
+        if (Personaje.atributosFisicos.containsKey(k)) {
+          atributosBase[k] = Personaje.atributosFisicos[k]!;
+          atributos[k] = Personaje.atributosFisicos[k]!;
+        }
+      }
+    }
+
+    for (final obj in Personaje.equipados) {
+      equipados.add(obj.id);
+    }
     _cargarObjetos();
   }
 
   Future<void> _cargarObjetos() async {
-    final texto = await rootBundle.loadString('assets/data/objetos.json');
-    final lista = jsonDecode(texto) as List<dynamic>;
-    if (!mounted) return;
-    setState(() {
-      objetos = lista.map((e) => ObjetoModelo.fromJson(e)).toList();
-    });
+    try {
+      final texto = await rootBundle.loadString('assets/data/objetos.json');
+      final lista = jsonDecode(texto) as List<dynamic>;
+      if (!mounted) return;
+      setState(() {
+        objetos = lista.map((e) => ObjetoModelo.fromJson(e)).toList();
+      });
+    } catch (e) {
+      debugPrint('Error al cargar objetos: $e');
+    }
   }
 
   IconData _iconoPorTipo(String tipo) {
@@ -84,7 +98,21 @@ class Pantalla3State extends State<Pantalla3> {
     }
   }
 
-  // Recorre los objetos y suma los bonificadores de los equipados para un atributo
+  IconData _obtenerIconoClase(String id) {
+    switch (id.toLowerCase()) {
+      case 'guerrero':
+        return Icons.shield;
+      case 'mago':
+        return Icons.auto_fix_high;
+      case 'arquero':
+        return Icons.gps_fixed;
+      case 'clerigo':
+        return Icons.auto_awesome;
+      default:
+        return Icons.person;
+    }
+  }
+
   int _bonus(String clave) {
     int suma = 0;
     for (final o in objetos) {
@@ -95,7 +123,6 @@ class Pantalla3State extends State<Pantalla3> {
     return suma;
   }
 
-  //Metodo para guardar los datos seleccionados y pasar a la pantalla 4
   void _guardarYContinuar() {
     Personaje.atributos = {
       for (final k in atributos.keys) k: atributos[k]! + _bonus(k),
@@ -106,11 +133,12 @@ class Pantalla3State extends State<Pantalla3> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const Pantalla4()),
+      MaterialPageRoute(
+        builder: (_) => Pantalla4(datosPrevios: widget.datosPrevios),
+      ),
     );
   }
 
-  //Crea un los atributos usando la clase AtributoItem
   Widget _construirAtributo(String clave) {
     final total = atributos[clave]! + _bonus(clave);
     return AtributoItem(
@@ -139,16 +167,18 @@ class Pantalla3State extends State<Pantalla3> {
 
   @override
   Widget build(BuildContext context) {
+    final nombrePersonaje = Personaje.nombre.isNotEmpty ? Personaje.nombre : 'Héroe';
+    final razaPersonaje = Personaje.razaNombre.isNotEmpty ? Personaje.razaNombre : 'Aventurero';
+    final clasePersonaje = Personaje.claseNombre.isNotEmpty ? Personaje.claseNombre : 'Sin clase';
+
     return Scaffold(
       backgroundColor: PaletaColores.fondo,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              //Icono nombre y título
               Row(
                 children: [
                   Container(
@@ -156,137 +186,30 @@ class Pantalla3State extends State<Pantalla3> {
                     decoration: BoxDecoration(
                       color: PaletaColores.superficie,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: PaletaColores.bordePrimario,
-                        width: 1.5,
-                      ),
+                      border: Border.all(color: PaletaColores.bordePrimario, width: 1.5),
                     ),
-
-                    child: const Icon(
-                      Icons.auto_fix_high,
-                      size: 40,
-                      color: PaletaColores.textoPrincipal,
-                    ),
+                    child: Icon(_obtenerIconoClase(Personaje.claseId), size: 40, color: PaletaColores.textoPrincipal),
                   ),
                   const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Nombre', style: AppTipografia.titularSeccion()),
-                      SizedBox(height: 2),
-                      Text(
-                        'Nivel 14 - Hechizero Arcano',
-                        style: AppTipografia.subtituloDecorativo(),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(nombrePersonaje, style: AppTipografia.titularSeccion(), overflow: TextOverflow.ellipsis),
+                        const SizedBox(height: 2),
+                        Text('$razaPersonaje · $clasePersonaje', style: AppTipografia.subtituloDecorativo(fontSize: 14, color: PaletaColores.textoSecundario), overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-
+              const SizedBox(height: 20),
               Text('Atributos', style: AppTipografia.titularSeccion()),
-              SizedBox(height: 20),
-
-              //Puntos para asignar
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: PaletaColores.superficie,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: PaletaColores.bordePrimario,
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Puntos para Asignar',
-                      style: AppTipografia.encabezado(),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: PaletaColores.bordePrimario,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '$puntosDisponibles PTOS',
-                        style: const TextStyle(
-                          color: Colors.amberAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-
-              //Atributos usando el componente AtributoItem de AtributoItem.dart
+              const SizedBox(height: 20),
               ...titulos.keys.map(_construirAtributo),
-
-              SizedBox(height: 30),
-
-              //Equipamiento
+              const SizedBox(height: 30),
               Text('Inventario', style: AppTipografia.titularSeccion()),
-
-              SizedBox(height: 20),
-
-              //Widget que sale cuando se selecciona un objeto
-              if (objetoSeleccionado != null) ...[
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: PaletaColores.superficie,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: PaletaColores.bordePrimario,
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            ' ${objetoSeleccionado!.nombre}',
-                            style: AppTipografia.titularSeccion(),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                objetoSeleccionado = null; //oculta la tarjeta si no hay ningun objeto seleccionado
-                              });
-                            },
-                            icon: const Icon(Icons.close, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        descripcionSeleccionada ?? '',
-                        style: AppTipografia.cuerpo(),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20),
-              ],
-
-              //Objetos usando el componente InventarioItem de InventarioItem.dart
+              const SizedBox(height: 20),
               Column(
                 children: objetos.map((o) {
                   return InventarioItem(
@@ -305,28 +228,18 @@ class Pantalla3State extends State<Pantalla3> {
                         objetoSeleccionado = o;
                         if (equipados.contains(o.id)) {
                           equipados.remove(o.id);
-                          descripcionSeleccionada =
-                              'Has desequipado ${o.nombre}.';
                         } else {
                           equipados.add(o.id);
-                          descripcionSeleccionada =
-                              '¡Has equipado ${o.nombre}!';
                         }
                       });
                     },
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20),
-
-              //Botón Guardar Equipamiento usando el elemento de buttons.dart
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: BotonFinal(
-                  texto: 'Crear Personaje',
-                  onPressed: _guardarYContinuar,
-                ),
-              ),
+              const SizedBox(height: 24),
+              BotonSiguiente(onPressed: _guardarYContinuar),
+              const SizedBox(height: 10),
+              BotonAtras(onPressed: () => Navigator.pop(context)),
             ],
           ),
         ),
