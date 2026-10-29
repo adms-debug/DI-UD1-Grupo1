@@ -63,7 +63,9 @@ class Pantalla4 extends StatelessWidget {
   }
 
   void _mostrarDialogoExito(BuildContext context) {
-    final nombre = Personaje.nombre.isNotEmpty ? Personaje.nombre : 'Tu personaje';
+    final nombre = Personaje.nombre.isNotEmpty
+        ? Personaje.nombre
+        : 'Tu personaje';
     final clase = Personaje.claseNombre.isNotEmpty ? Personaje.claseNombre : '';
     final raza = Personaje.razaNombre.isNotEmpty ? Personaje.razaNombre : '';
 
@@ -82,7 +84,11 @@ class Pantalla4 extends StatelessWidget {
           ),
           title: Row(
             children: [
-              const Icon(Icons.check_circle, color: PaletaColores.bordePrimario, size: 28),
+              const Icon(
+                Icons.check_circle,
+                color: PaletaColores.bordePrimario,
+                size: 28,
+              ),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
@@ -146,8 +152,21 @@ class Pantalla4 extends StatelessWidget {
     );
   }
 
+  int _valor(String clave) {
+    if (fisicos.contains(clave)) {
+      final base = Personaje.atributosFisicos[clave] ?? 0;
+      final bonus = Personaje.equipados.fold<int>(
+        0,
+        (suma, o) => suma + (o.bonificadores[clave] ?? 0),
+      );
+      return base + bonus;
+    }
+    // Mentales: Pantalla3 ya guarda el valor final con bonus de objetos
+    return Personaje.atributos[clave] ?? 0;
+  }
+
   Widget _filaAtributo(String clave) {
-    final valor = Personaje.atributos[clave] ?? 0;
+    final valor = _valor(clave);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Column(
@@ -256,7 +275,10 @@ class Pantalla4 extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              Text('Resumen del Personaje', style: AppTipografia.titularSeccion()),
+              Text(
+                'Resumen del Personaje',
+                style: AppTipografia.titularSeccion(),
+              ),
               const SizedBox(height: 16),
 
               // 1. Tarjeta: Identidad y Biografía (Datos de Pantalla 1)
@@ -411,7 +433,9 @@ class Pantalla4 extends StatelessWidget {
                                     children: [
                                       Text(
                                         o.nombre.toUpperCase(),
-                                        style: AppTipografia.encabezado(fontSize: 15),
+                                        style: AppTipografia.encabezado(
+                                          fontSize: 15,
+                                        ),
                                       ),
                                       Text(
                                         o.descripcion,
@@ -437,9 +461,7 @@ class Pantalla4 extends StatelessWidget {
               const SizedBox(height: 10),
 
               // Botón Atrás: Permite volver a la Pantalla 3 para modificar datos
-              BotonAtras(
-                onPressed: () => Navigator.pop(context),
-              ),
+              BotonAtras(onPressed: () => Navigator.pop(context)),
               const SizedBox(height: 20),
             ],
           ),

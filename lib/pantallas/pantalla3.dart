@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'dart:convert';
 
 import 'package:creador_personaje_rpg/components/AtributoItem.dart';
@@ -24,9 +25,6 @@ class Pantalla3State extends State<Pantalla3> {
   int puntosDisponibles = 5;
 
   final Map<String, int> atributosBase = {
-    'fuerza': 10,
-    'destreza': 10,
-    'constitucion': 10,
     'inteligencia': 10,
     'sabiduria': 10,
     'carisma': 10,
@@ -34,18 +32,12 @@ class Pantalla3State extends State<Pantalla3> {
   late final Map<String, int> atributos = Map.of(atributosBase);
 
   static const Map<String, String> titulos = {
-    'fuerza': 'FUERZA',
-    'destreza': 'DESTREZA',
-    'constitucion': 'CONSTITUCIÓN',
     'inteligencia': 'INTELIGENCIA',
     'sabiduria': 'SABIDURÍA',
     'carisma': 'CARISMA',
   };
 
   static const Map<String, IconData> iconosAtributo = {
-    'fuerza': Icons.fitness_center,
-    'destreza': Icons.bolt,
-    'constitucion': Icons.shield,
     'inteligencia': Icons.book,
     'sabiduria': Icons.remove_red_eye,
     'carisma': Icons.favorite,
@@ -59,15 +51,6 @@ class Pantalla3State extends State<Pantalla3> {
   @override
   void initState() {
     super.initState();
-    if (Personaje.atributosFisicos.isNotEmpty) {
-      for (final k in ['fuerza', 'destreza', 'constitucion']) {
-        if (Personaje.atributosFisicos.containsKey(k)) {
-          atributosBase[k] = Personaje.atributosFisicos[k]!;
-          atributos[k] = Personaje.atributosFisicos[k]!;
-        }
-      }
-    }
-
     for (final obj in Personaje.equipados) {
       equipados.add(obj.id);
     }
@@ -113,6 +96,7 @@ class Pantalla3State extends State<Pantalla3> {
     }
   }
 
+  //Suma los bonificadores de los objetos equipados
   int _bonus(String clave) {
     int suma = 0;
     for (final o in objetos) {
@@ -167,9 +151,15 @@ class Pantalla3State extends State<Pantalla3> {
 
   @override
   Widget build(BuildContext context) {
-    final nombrePersonaje = Personaje.nombre.isNotEmpty ? Personaje.nombre : 'Héroe';
-    final razaPersonaje = Personaje.razaNombre.isNotEmpty ? Personaje.razaNombre : 'Aventurero';
-    final clasePersonaje = Personaje.claseNombre.isNotEmpty ? Personaje.claseNombre : 'Sin clase';
+    final nombrePersonaje = Personaje.nombre.isNotEmpty
+        ? Personaje.nombre
+        : 'Héroe';
+    final razaPersonaje = Personaje.razaNombre.isNotEmpty
+        ? Personaje.razaNombre
+        : 'Aventurero';
+    final clasePersonaje = Personaje.claseNombre.isNotEmpty
+        ? Personaje.claseNombre
+        : 'Sin clase';
 
     return Scaffold(
       backgroundColor: PaletaColores.fondo,
@@ -186,18 +176,36 @@ class Pantalla3State extends State<Pantalla3> {
                     decoration: BoxDecoration(
                       color: PaletaColores.superficie,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: PaletaColores.bordePrimario, width: 1.5),
+                      border: Border.all(
+                        color: PaletaColores.bordePrimario,
+                        width: 1.5,
+                      ),
                     ),
-                    child: Icon(_obtenerIconoClase(Personaje.claseId), size: 40, color: PaletaColores.textoPrincipal),
+                    child: Icon(
+                      _obtenerIconoClase(Personaje.claseId),
+                      size: 40,
+                      color: PaletaColores.textoPrincipal,
+                    ),
                   ),
                   const SizedBox(width: 15),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(nombrePersonaje, style: AppTipografia.titularSeccion(), overflow: TextOverflow.ellipsis),
+                        Text(
+                          nombrePersonaje,
+                          style: AppTipografia.titularSeccion(),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         const SizedBox(height: 2),
-                        Text('$razaPersonaje · $clasePersonaje', style: AppTipografia.subtituloDecorativo(fontSize: 14, color: PaletaColores.textoSecundario), overflow: TextOverflow.ellipsis),
+                        Text(
+                          '$razaPersonaje · $clasePersonaje',
+                          style: AppTipografia.subtituloDecorativo(
+                            fontSize: 14,
+                            color: PaletaColores.textoSecundario,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ),
