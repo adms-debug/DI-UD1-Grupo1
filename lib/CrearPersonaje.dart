@@ -94,7 +94,6 @@ class _CrearPersonajeState extends State<CrearPersonaje> {
             const SizedBox(height: 12),
             SelectorRaza(onChanged: (raza) => _raza = raza),
             const SizedBox(height: 24),
-            BotonCrearPersonaje(onPressed: _crear),
           ],
         ),
       ),

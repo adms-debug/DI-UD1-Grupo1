@@ -5,6 +5,9 @@ import 'package:creador_personaje_rpg/componentes pantalla3/ObjetoModelo.dart';
 import 'package:creador_personaje_rpg/PaletaColores.dart';
 import 'package:creador_personaje_rpg/AppTipografia.dart';
 import 'package:creador_personaje_rpg/Buttons.dart';
+import 'package:creador_personaje_rpg/pantalla1.dart';
+import 'package:creador_personaje_rpg/pantallas/pantalla4.dart';
+import 'package:creador_personaje_rpg/Personaje.dart';
 
 import 'dart:convert';
 
@@ -21,6 +24,7 @@ class Pantalla3State extends State<Pantalla3> {
   //Puntos y atributos
   int puntosDisponibles = 5;
 
+  //Los atributos no se pueden bajar de 10
   final Map<String, int> atributosBase = {
     'fuerza': 10,
     'destreza': 10,
@@ -80,7 +84,7 @@ class Pantalla3State extends State<Pantalla3> {
     }
   }
 
-  // Suma los bonificadores de los objetos equipados para un atributo
+  // Recorre los objetos y suma los bonificadores de los equipados para un atributo
   int _bonus(String clave) {
     int suma = 0;
     for (final o in objetos) {
@@ -91,6 +95,22 @@ class Pantalla3State extends State<Pantalla3> {
     return suma;
   }
 
+  //Metodo para guardar los datos seleccionados y pasar a la pantalla 4
+  void _guardarYContinuar() {
+    Personaje.atributos = {
+      for (final k in atributos.keys) k: atributos[k]! + _bonus(k),
+    };
+    Personaje.equipados = objetos
+        .where((o) => equipados.contains(o.id))
+        .toList();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const Pantalla4()),
+    );
+  }
+
+  //Crea un los atributos usando la clase AtributoItem
   Widget _construirAtributo(String clave) {
     final total = atributos[clave]! + _bonus(clave);
     return AtributoItem(
@@ -152,7 +172,7 @@ class Pantalla3State extends State<Pantalla3> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('NOMBRE', style: AppTipografia.titularSeccion()),
+                      Text('Nombre', style: AppTipografia.titularSeccion()),
                       SizedBox(height: 2),
                       Text(
                         'Nivel 14 - Hechizero Arcano',
@@ -242,7 +262,7 @@ class Pantalla3State extends State<Pantalla3> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Detalles: ${objetoSeleccionado!.nombre}',
+                            ' ${objetoSeleccionado!.nombre}',
                             style: AppTipografia.titularSeccion(),
                           ),
                           IconButton(
@@ -302,10 +322,9 @@ class Pantalla3State extends State<Pantalla3> {
               //Botón Guardar Equipamiento usando el elemento de buttons.dart
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: BotonCrearPersonaje(
-                  onPressed: () {
-                    print("Boton pulsado");
-                  },
+                child: BotonFinal(
+                  texto: 'Crear Personaje',
+                  onPressed: _guardarYContinuar,
                 ),
               ),
             ],

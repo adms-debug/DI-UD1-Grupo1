@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'AppTipografia.dart';
 import 'PaletaColores.dart';
 
@@ -54,7 +55,10 @@ class BotonAtras extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: PaletaColores.bordePrimario,
-          side: const BorderSide(color: PaletaColores.bordePrimario, width: 1.5),
+          side: const BorderSide(
+            color: PaletaColores.bordePrimario,
+            width: 1.5,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -67,11 +71,7 @@ class BotonAtras extends StatelessWidget {
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.arrow_back),
-            SizedBox(width: 8),
-            Text('Atrás'),
-          ],
+          children: [Icon(Icons.arrow_back), SizedBox(width: 8), Text('Atrás')],
         ),
       ),
     );
@@ -79,10 +79,11 @@ class BotonAtras extends StatelessWidget {
 }
 
 // Botón final para crear el personaje (se usará en la última pantalla).
-class BotonCrearPersonaje extends StatelessWidget {
+class BotonFinal extends StatelessWidget {
+  final String texto;
   final VoidCallback onPressed;
 
-  const BotonCrearPersonaje({super.key, required this.onPressed});
+  const BotonFinal({super.key, required this.texto, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,7 @@ class BotonCrearPersonaje extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        child: const Text('Crear personaje'),
+        child: Text(texto),
       ),
     );
   }
